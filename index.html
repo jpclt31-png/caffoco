@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caffoco · Minha bancada de café</title>
+<meta name="description" content="Todos os equipamentos da bancada da Caffoco — espresso e coados — com links para comprar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --torra:   #1E120C;  /* fundo — torra escura */
+    --borra:   #2A1B12;  /* cartões */
+    --borda:   #3B2819;
+    --crema:   #E3A75C;  /* destaque — crema */
+    --crema-2: #C77E3A;
+    --leite:   #F3E9DC;  /* texto principal */
+    --palha:   #A98B70;  /* texto secundário */
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--torra);
+    color:var(--leite);
+    font-family:"Bricolage Grotesque",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  /* barra de extração — o "shot" descendo no topo da página */
+  .extracao{
+    position:fixed;top:0;left:0;right:0;height:5px;z-index:10;
+    background:linear-gradient(90deg,#1E120C 0%,#5A3218 30%,#C77E3A 62%,#E3A75C 82%,#F0C98E 100%);
+  }
+  .wrap{max-width:540px;margin:0 auto;padding:56px 20px 64px}
+
+  /* cabeçalho */
+  header{text-align:center;margin-bottom:34px}
+  .marca{
+    font-size:clamp(2.6rem,11vw,3.4rem);
+    font-weight:800;
+    font-variation-settings:"opsz" 96;
+    letter-spacing:-.02em;
+    line-height:1;
+  }
+  .marca span{color:var(--crema)}
+  .tagline{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--palha);margin-top:12px;
+  }
+  .bio{
+    color:var(--palha);font-size:.95rem;line-height:1.55;
+    max-width:40ch;margin:14px auto 0;
+  }
+  .insta{
+    display:inline-flex;align-items:center;gap:8px;
+    margin-top:18px;padding:9px 18px;border-radius:999px;
+    border:1px solid var(--borda);color:var(--leite);
+    text-decoration:none;font-size:.88rem;font-weight:500;
+    transition:border-color .2s,background .2s;
+  }
+  .insta:hover,.insta:focus-visible{border-color:var(--crema);background:rgba(227,167,92,.08)}
+  .insta svg{width:16px;height:16px;stroke:var(--crema)}
+
+  /* filtros */
+  .filtros{
+    display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+    margin-bottom:30px;
+  }
+  .chip{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+    background:none;border:1px solid var(--borda);color:var(--palha);
+    padding:8px 14px;border-radius:999px;cursor:pointer;
+    transition:all .2s;
+  }
+  .chip:hover{border-color:var(--crema-2);color:var(--leite)}
+  .chip.ativo{background:var(--crema);border-color:var(--crema);color:#241409;font-weight:500}
+  .chip:focus-visible{outline:2px solid var(--crema);outline-offset:2px}
+
+  /* seções */
+  .secao{margin-bottom:36px}
+  .secao-titulo{
+    display:flex;align-items:baseline;gap:12px;
+    margin-bottom:14px;
+  }
+  .secao-titulo h2{
+    font-size:1.05rem;font-weight:700;letter-spacing:.01em;
+  }
+  .secao-titulo .dial{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.66rem;letter-spacing:.18em;color:var(--crema);
+    text-transform:uppercase;
+  }
+  .secao-titulo::after{
+    content:"";flex:1;height:1px;background:var(--borda);align-self:center;
+  }
+
+  /* cartões de item */
+  .lista{display:flex;flex-direction:column;gap:10px}
+  .item{
+    display:flex;align-items:center;gap:14px;
+    background:var(--borra);
+    border:1px solid var(--borda);
+    border-radius:14px;
+    padding:14px 16px;
+    text-decoration:none;color:var(--leite);
+    transition:transform .15s,border-color .2s,background .2s;
+  }
+  .item:hover,.item:focus-visible{
+    transform:translateX(4px);
+    border-color:var(--crema-2);
+    background:#31210f2e;
+    background:#332114;
+  }
+  .item:focus-visible{outline:2px solid var(--crema);outline-offset:2px}
+  .item-info{flex:1;min-width:0}
+  .item-nome{font-weight:600;font-size:.95rem;line-height:1.35}
+  .item-loja{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--palha);margin-top:4px;
+  }
+  .item-seta{
+    flex-shrink:0;width:30px;height:30px;border-radius:50%;
+    border:1px solid var(--borda);
+    display:grid;place-items:center;
+    color:var(--crema);font-size:.85rem;
+    transition:background .2s,border-color .2s;
+  }
+  .item:hover .item-seta{background:var(--crema);border-color:var(--crema);color:#241409}
+
+  footer{
+    text-align:center;margin-top:44px;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--palha);line-height:2;
+  }
+  footer .grao{color:var(--crema)}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .item,.item:hover{transform:none;transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="extracao" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header>
+    <h1 class="marca">caff<span>oco</span></h1>
+    <p class="tagline">espresso · coados · bancada</p>
+    <p class="bio">Tudo o que uso (e testo) na minha bancada de café, com link direto pra você garantir o seu.</p>
+    <a class="insta" href="https://instagram.com/caffoco" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg>
+      @caffoco
+    </a>
+  </header>
+
+  <nav class="filtros" aria-label="Filtrar itens"></nav>
+  <main id="conteudo"></main>
+
+  <footer>
+    <span class="grao">●</span> caffoco · links afiliados <span class="grao">●</span><br>
+    obrigado por apoiar a página ☕
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   COMO ADICIONAR UM ITEM NOVO ✏️
+   1. Ache a seção certa abaixo (Espresso, Coados ou Bancada).
+   2. Copie uma linha { nome: "...", url: "..." } e cole no fim
+      da lista, trocando o nome e o link.
+   3. Salve o arquivo. A loja (Amazon / AliExpress / Mercado
+      Livre) é detectada automaticamente pelo link.
+   Para criar uma seção nova, copie um bloco inteiro
+   { titulo: ..., dial: ..., itens: [...] } e edite.
+   ============================================================ */
+const SECOES = [
+  {
+    titulo: "Espresso",
+    dial: "método 01",
+    itens: [
+      { nome: "Cafeteira Philco 15 Bar", url: "https://link.amazon/B026Di8j1" },
+      { nome: "Cafeteira Hibrew H10B", url: "https://s.click.aliexpress.com/e/_mOpisDV" },
+      { nome: "Moedor Starseeker E55 Pro", url: "https://s.click.aliexpress.com/e/_mO2ctYr" },
+      { nome: "Porta-filtro Naked 51mm", url: "https://s.click.aliexpress.com/e/_m0NKkQJ" },
+      { nome: "Cesta de Alta Extração", url: "https://s.click.aliexpress.com/e/_mKQPDL5" },
+      { nome: "Distribuidor", url: "https://s.click.aliexpress.com/e/_mPjpWVH" },
+      { nome: "WDT (agulha)", url: "https://s.click.aliexpress.com/e/_mq7nyDH" },
+      { nome: "Tamper", url: "https://s.click.aliexpress.com/e/_m0ioBHv" },
+      { nome: "Puckscreen", url: "https://s.click.aliexpress.com/e/_mqLj8xt" },
+      { nome: "Suporte magnético para Puck Screen", url: "https://s.click.aliexpress.com/e/_c3c6wYbb" },
+      { nome: "Funil 51mm", url: "https://s.click.aliexpress.com/e/_mKi136L" },
+      { nome: "Spray RDT", url: "https://s.click.aliexpress.com/e/_m0GenjV" },
+      { nome: "Bandeja dosadora de café", url: "https://s.click.aliexpress.com/e/_mszrqdV" },
+      { nome: "Jarra Pitcher", url: "https://s.click.aliexpress.com/e/_mMasOy7" }
+    ]
+  },
+  {
+    titulo: "Coados",
+    dial: "método 02",
+    itens: [
+      { nome: "Hario V60 NEO", url: "https://link.amazon/B09QzCLD2" },
+      { nome: "Kit Hario V60", url: "https://link.amazon/B02gKGjyP" },
+      { nome: "Filtro de Papel Hario 02", url: "https://link.amazon/B04kXMwpf" },
+      { nome: "Chaleira Bico de Ganso com controle de temperatura", url: "https://s.click.aliexpress.com/e/_msb2HcR" },
+      { nome: "Guarda-Filtro de papel", url: "https://s.click.aliexpress.com/e/_c3KCedmV" }
+    ]
+  },
+  {
+    titulo: "Bancada & utilidades",
+    dial: "apoio",
+    itens: [
+      { nome: "Mini Balança com temporizador", url: "https://s.click.aliexpress.com/e/_mte6Pjd" },
+      { nome: "Pano barista de alta absorção", url: "https://link.amazon/B06zuCoCa" },
+      { nome: "Clamper — filtro de linha com proteção", url: "https://meli.la/2df3inb" }
+    ]
+  }
+];
+/* ====== fim da área de edição — daqui pra baixo é automático ====== */
+
+function detectarLoja(url){
+  if (url.includes("amazon")) return "Amazon";
+  if (url.includes("aliexpress")) return "AliExpress";
+  if (url.includes("meli.la") || url.includes("mercadolivre")) return "Mercado Livre";
+  if (url.includes("shopee")) return "Shopee";
+  return "Ver oferta";
+}
+
+const main = document.getElementById("conteudo");
+const nav  = document.querySelector(".filtros");
+
+function render(filtro){
+  main.innerHTML = "";
+  SECOES.forEach(sec=>{
+    if (filtro !== "Tudo" && sec.titulo !== filtro) return;
+    const s = document.createElement("section");
+    s.className = "secao";
+    s.innerHTML = `<div class="secao-titulo"><span class="dial">${sec.dial}</span><h2>${sec.titulo}</h2></div>`;
+    const ul = document.createElement("div");
+    ul.className = "lista";
+    sec.itens.forEach(it=>{
+      const a = document.createElement("a");
+      a.className = "item";
+      a.href = it.url;
+      a.target = "_blank";
+      a.rel = "noopener sponsored";
+      a.innerHTML = `
+        <div class="item-info">
+          <div class="item-nome">${it.nome}</div>
+          <div class="item-loja">${detectarLoja(it.url)}</div>
+        </div>
+        <div class="item-seta" aria-hidden="true">→</div>`;
+      ul.appendChild(a);
+    });
+    s.appendChild(ul);
+    main.appendChild(s);
+  });
+}
+
+const filtros = ["Tudo", ...SECOES.map(s=>s.titulo)];
+filtros.forEach((f,i)=>{
+  const b = document.createElement("button");
+  b.className = "chip" + (i===0 ? " ativo" : "");
+  b.textContent = f;
+  b.addEventListener("click",()=>{
+    nav.querySelectorAll(".chip").forEach(c=>c.classList.remove("ativo"));
+    b.classList.add("ativo");
+    render(f);
+  });
+  nav.appendChild(b);
+});
+
+render("Tudo");
+</script>
+</body>
+</html>
